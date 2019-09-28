@@ -1,0 +1,112 @@
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+    minikube_version: 1.4.0
+    docker_version: 18.09.9
+    kubectl_version: 1.16.0
+  tasks:
+
+    - name: install system updates
+      yum: name=* state=latest update_cache=yes
+
+    - name: disable swap
+      shell: /usr/sbin/swapoff -a
+
+    - name: disable swap permanently
+      lineinfile:
+        path: /etc/fstab
+        regexp: '^[^#].*swap.*$'
+        state: absent
+
+    - name: delete swapfile
+      file:
+        path: /swapfile
+        state: absent
+
+    - name: install prerequisites
+      yum:
+        name: [ vim, socat, device-mapper-persistent-data, lvm2 ]
+
+    - name: download minikube rpm
+      get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-{{ minikube_version }}.rpm
+        dest: /var/tmp/minikube-{{ minikube_version }}.rpm
+        mode: '0644'
+
+    - name: install minikube rpm
+      yum:
+        name: /var/tmp/minikube-{{ minikube_version }}.rpm
+
+    - name: delete minikube rpm
+      file:
+        path: /var/tmp/minikube-{{ minikube_version }}.rpm
+        state: absent
+
+    - name: add docker repository
+      yum_repository:
+        name: docker-ce-stable
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+        gpgcheck: yes
+        gpgkey: https://download.docker.com/linux/centos/gpg
+
+    - name: install docker-ce
+      yum:
+        name: docker-ce-{{ docker_version }}
+
+    - name: start and enable docker service
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: set bridge-nf-call-iptables = 1
+      lineinfile:
+        path: /etc/sysctl.conf
+        line: net.bridge.bridge-nf-call-iptables = 1
+
+    - name: apply sysctl config
+      shell: sysctl -p
+
+    - name: start minikube
+      shell: minikube start --vm-driver=none
+
+    - name: start and enable kubelet service
+      service:
+        name: kubelet
+        enabled: yes
+        state: started
+    
+    - name: create dir /home/vagrant/bin
+      file:
+        path: /home/vagrant/bin
+        state: directory
+
+    - name: download kubectl
+      get_url:
+        url: https://storage.googleapis.com/kubernetes-release/release/v{{ kubectl_version }}/bin/linux/amd64/kubectl
+        dest: /usr/bin/kubectl
+        mode: 0755
+
+    - name: copy kubectl conf
+      copy:
+        src: /root/.kube
+        dest: /home/vagrant/
+        remote_src: yes
+        owner: vagrant
+        group: vagrant
+
+    - name: fix kubectl conf
+      replace:
+        path: /home/vagrant/.kube/config
+        regexp: '/root'
+        replace: '/home/vagrant'
+
+    - name: copy minikube conf
+      copy:
+        src: /root/.minikube
+        dest: /home/vagrant/
+        remote_src: yes
+        owner: vagrant
+        group: vagrant
