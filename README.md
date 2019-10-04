@@ -36,3 +36,6 @@ What is your Vagrant Cloud username? [mrvantage] evenbetterboxes
 What is your Vagrant Cloud token? 
 ```
 6. Profit!
+
+## Changelog
+You can find the changelog [here](CHANGELOG.md)
