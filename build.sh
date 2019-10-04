@@ -43,12 +43,7 @@ Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${B
 
 ---
 
-## Release notes
-### 1.0.1-2019
-* Updated automatic box version description on Vagrant Cloud.
-
-### 1.0.0-20190929
-* Initial version.
+$(cat CHANGELOG.md)
 
 ---
 
@@ -58,13 +53,15 @@ Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${B
 Built on commit: \`${commit}\`
 "
 
+echo "${BOX_VERSION_DESCRIPTION}"
+
 # Validate build config
 echo "Validating build json files"
 packer validate packer.json || exit 1
 
 # Run the actual build
 echo "Building box version ${BOX_VERSION}"
-packer build -force packer.json || exit 1
+#packer build -force packer.json || exit 1
 
 # Tag git commit for this build
-git tag -a "${BOX_VERSION}" -m "Version ${BOX_VERSION} built."
+#git tag -a "${BOX_VERSION}" -m "Version ${BOX_VERSION} built."
