@@ -61,7 +61,7 @@ packer validate packer.json || exit 1
 
 # Run the actual build
 echo "Building box version ${BOX_VERSION}"
-#packer build -force packer.json || exit 1
+packer build -force packer.json || exit 1
 
 # Tag git commit for this build
-#git tag -a "${BOX_VERSION}" -m "Version ${BOX_VERSION} built."
+git tag -a "${BOX_VERSION}" -m "Version ${BOX_VERSION} built."
