@@ -110,3 +110,8 @@
         remote_src: yes
         owner: vagrant
         group: vagrant
+
+    - name: create /vagrant directory
+      file:
+        path: /vagrant
+        state: directory

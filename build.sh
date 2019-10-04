@@ -1,7 +1,6 @@
 #!/bin/bash
 # Set version info
-BOX_VERSION_BASE=1.0.0
-BOX_VERSION_DESCRIPTION='Initial version.'
+BOX_VERSION_BASE=1.0.1
 
 # Set versions requested of main components
 export BOX_BASE="centos/7"
@@ -27,12 +26,14 @@ export VAGRANT_CLOUD_TOKEN=${token}
 export BOX_VERSION=${BOX_VERSION_BASE}-$(date +'%Y%m%d')
 commit=$(git --no-pager log -n 1 --format="%H")
 export BOX_VERSION_DESCRIPTION="
-## Release notes
-${BOX_VERSION_DESCRIPTION}
+## Description
+This box is based on the centos/7 box. I try to keep the builds up to date with the latest version of this box. When the box boots it contains a running minikube, ready to deploy kubenetes manifests and kubectl is pre configured for the vagrant user.
+
+The box defaults to 2 CPU and 4GB of RAM, it is not advised to limit this.
 
 ---
 
-## Versions
+## Versions included in this release
 Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${BOX_BASE_VERSION}
 * latest updates installed at build time
 * ansible ${ANSIBLE_VERSION}
@@ -42,11 +43,17 @@ Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${B
 
 ---
 
+$(cat CHANGELOG.md)
+
+---
+
 ## Source info
 [View source on Github](https://github.com/mrvantage/vagrant-box-centos7-minikube)
 
 Built on commit: \`${commit}\`
 "
+
+echo "${BOX_VERSION_DESCRIPTION}"
 
 # Validate build config
 echo "Validating build json files"
