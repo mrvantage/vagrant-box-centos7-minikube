@@ -1,6 +1,6 @@
 #!/bin/bash
 # Set version info
-BOX_VERSION_BASE=1.0.1
+BOX_VERSION_BASE=1.0.2
 
 # Set versions requested of main components
 export BOX_BASE="centos/7"
