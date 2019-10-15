@@ -103,6 +103,12 @@
         regexp: '/root'
         replace: '/home/vagrant'
 
+    - name: enable kubectl autocompletion
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: source <(kubectl completion bash)
+        insertafter: EOF
+
     - name: copy minikube conf
       copy:
         src: /root/.minikube
