@@ -8,7 +8,7 @@ export BOX_BASE_VERSION=1905.1
 export ANSIBLE_VERSION=2.8.4
 export MINIKUBE_VERSION=1.4.0
 export DOCKER_VERSION=18.09.9
-export KUBECTL_VERSION=1.16.0
+export KUBECTL_VERSION=1.16.1
 
 # Ask user for vagrant cloud token
 echo -n "What is your Vagrant Cloud username? [mrvantage] "
