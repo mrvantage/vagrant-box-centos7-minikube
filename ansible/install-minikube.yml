@@ -4,7 +4,7 @@
   vars:
     minikube_version: 1.4.0
     docker_version: 18.09.9
-    kubectl_version: 1.16.0
+    kubectl_version: 1.16.1
   tasks:
 
     - name: install system updates
