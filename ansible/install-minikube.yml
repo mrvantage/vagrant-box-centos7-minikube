@@ -4,11 +4,15 @@
   vars:
     minikube_version: 1.4.0
     docker_version: 18.09.9
-    kubectl_version: 1.16.0
+    kubectl_version: 1.16.1
   tasks:
 
     - name: install system updates
       yum: name=* state=latest update_cache=yes
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
 
     - name: disable swap
       shell: /usr/sbin/swapoff -a
@@ -61,6 +65,12 @@
         enabled: yes
         state: started
 
+    - name: Add vagrant user to docker group
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+
     - name: set bridge-nf-call-iptables = 1
       lineinfile:
         path: /etc/sysctl.conf
@@ -102,6 +112,12 @@
         path: /home/vagrant/.kube/config
         regexp: '/root'
         replace: '/home/vagrant'
+
+    - name: enable kubectl autocompletion
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: source <(kubectl completion bash)
+        insertafter: EOF
 
     - name: copy minikube conf
       copy:
