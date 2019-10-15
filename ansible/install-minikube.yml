@@ -65,6 +65,12 @@
         enabled: yes
         state: started
 
+    - name: Add vagrant user to docker group
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+
     - name: set bridge-nf-call-iptables = 1
       lineinfile:
         path: /etc/sysctl.conf
