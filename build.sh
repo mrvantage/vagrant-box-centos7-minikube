@@ -1,14 +1,15 @@
 #!/bin/bash
 # Set version info
-BOX_VERSION_BASE=1.0.2
+BOX_VERSION_BASE=1.0.3
 
 # Set versions requested of main components
 export BOX_BASE="centos/7"
 export BOX_BASE_VERSION=1905.1
-export ANSIBLE_VERSION=2.8.4
-export MINIKUBE_VERSION=1.4.0
-export DOCKER_VERSION=18.09.9
-export KUBECTL_VERSION=1.16.1
+export ANSIBLE_VERSION=2.9.2
+export MINIKUBE_VERSION=1.6.1
+export DOCKER_VERSION=19.03.5
+export KUBECTL_VERSION=1.17.0
+export HELM_VERSION=3.0.2
 
 # Ask user for vagrant cloud token
 echo -n "What is your Vagrant Cloud username? [mrvantage] "
@@ -27,7 +28,9 @@ export BOX_VERSION=${BOX_VERSION_BASE}-$(date +'%Y%m%d')
 commit=$(git --no-pager log -n 1 --format="%H")
 export BOX_VERSION_DESCRIPTION="
 ## Description
-This box is based on the centos/7 box. I try to keep the builds up to date with the latest version of this box. When the box boots it contains a running minikube, ready to deploy kubenetes manifests and kubectl is pre configured for the vagrant user.
+This box is based on the ${BOX_BASE} box version ${BOX_BASE_VERSION}. I try to keep the builds up to date with the latest version of this box.
+When the box boots it contains a running minikube, ready to deploy kubenetes manifests and kubectl is pre configured for the vagrant user.
+Helm is installed to allow the immediate deployment of charts.
 
 The box defaults to 2 CPU and 4GB of RAM, it is not advised to limit this.
 
@@ -40,6 +43,7 @@ Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${B
 * minikube ${MINIKUBE_VERSION}
 * docker ${DOCKER_VERSION}
 * kubectl ${KUBECTL_VERSION}
+* helm ${HELM_VERSION}
 
 ---
 
