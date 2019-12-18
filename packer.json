@@ -6,6 +6,7 @@
     "minikube_version": "{{ env `MINIKUBE_VERSION` }}",
     "docker_version": "{{ env `DOCKER_VERSION` }}",
     "kubectl_version": "{{ env `KUBECTL_VERSION` }}",
+    "helm_version": "{{ env `HELM_VERSION` }}",
     "vagrant_cloud_user": "{{ env `VAGRANT_CLOUD_USER` }}",
     "vagrant_cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
     "box_version": "{{ env `BOX_VERSION` }}",
@@ -47,7 +48,7 @@
     [
       {
         "type": "vagrant-cloud",
-        "box_tag": "{{user `vagrant_cloud_user`}}/centos7-minikube",
+        "box_tag": "mrvantage/centos7-minikube",
         "access_token": "{{user `vagrant_cloud_token`}}",
         "version": "{{user `box_version`}}",
         "version_description": "{{user `box_version_description`}}",

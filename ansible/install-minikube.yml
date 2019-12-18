@@ -2,9 +2,10 @@
   become: yes
   become_method: sudo
   vars:
-    minikube_version: 1.4.0
-    docker_version: 18.09.9
-    kubectl_version: 1.16.1
+    minikube_version: 1.6.1
+    docker_version: 19.03.5
+    kubectl_version: 1.17.0
+    helm_version: 3.0.2
   tasks:
 
     - name: install system updates
@@ -93,11 +94,17 @@
         path: /home/vagrant/bin
         state: directory
 
-    - name: download kubectl
-      get_url:
-        url: https://storage.googleapis.com/kubernetes-release/release/v{{ kubectl_version }}/bin/linux/amd64/kubectl
-        dest: /usr/bin/kubectl
-        mode: 0755
+    - name: add kubernetes repository
+      yum_repository:
+        name: Kubernetes
+        description: Kubernetes
+        baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+        gpgcheck: yes
+        gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+    - name: install kubectl
+      yum:
+        name: kubectl-{{ kubectl_version }}
 
     - name: copy kubectl conf
       copy:
@@ -131,3 +138,19 @@
       file:
         path: /vagrant
         state: directory
+
+    - name: download helm
+      get_url:
+        url: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        dest: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        mode: 0755
+
+    - name: extract helm
+      unarchive:
+        src: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        remote_src: yes
+        dest: /home/vagrant/bin
+        extra_opts:
+          - "linux-amd64/helm"
+          - "--strip-components=1"
+        mode: 0755
