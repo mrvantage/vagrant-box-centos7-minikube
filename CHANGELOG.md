@@ -1,4 +1,9 @@
 ## Changelog
+### 1.0.4-20191219
+* Changed minikube configuration to allow NodePort services on port numbers 1024-65535
+* Installed some troubleshooting tools in the image: telnet, tcpdump
+* Fixed small issues with the helm installation
+
 ### 1.0.3-20191218
 * Provisioning is now running using Ansible 2.9.2
 * Updated kubectl to 1.17.0, and installing it via official yum packages

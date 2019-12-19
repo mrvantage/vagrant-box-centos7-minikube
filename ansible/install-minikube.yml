@@ -31,7 +31,7 @@
 
     - name: install prerequisites
       yum:
-        name: [ vim, socat, device-mapper-persistent-data, lvm2 ]
+        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump ]
 
     - name: download minikube rpm
       get_url:
@@ -82,6 +82,13 @@
 
     - name: start minikube
       shell: minikube start --vm-driver=none
+
+    - name: Add service-node-port-range parameter to minikube config file
+      lineinfile:
+        state: present
+        path: /etc/kubernetes/manifests/kube-apiserver.yaml
+        line: '    - --service-node-port-range=1024-65535'
+        insertafter: '^.*service-account-key-file.*$'
 
     - name: start and enable kubelet service
       service:
@@ -154,3 +161,15 @@
           - "linux-amd64/helm"
           - "--strip-components=1"
         mode: 0755
+
+    - name: delete downloaded helm installer
+      file:
+        path: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        state: absent
+
+    - name: change helm executable ownership to vagrant
+      file:
+        path: /home/vagrant/bin/helm
+        mode: 0755
+        owner: vagrant
+        group: vagrant
