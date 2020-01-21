@@ -13,7 +13,7 @@ Built boxes can be found on [Vagrant Cloud](https://app.vagrantup.com/mrvantage/
 ## Prerequisites
 To be able to build the box yourself, you'll need at least following tools installed.
 
-* Virtualbox (tested with version 6.0.14)
+* Virtualbox (tested with version 6.0.16)
 * Vagrant (tested with version 2.2.6)
 * packer (tested with version 1.4.3, do not use 1.4.5, it seems broken!)
 

@@ -2,7 +2,7 @@
   become: yes
   become_method: sudo
   vars:
-    minikube_version: 1.6.1
+    minikube_version: 1.6.2
     docker_version: 19.03.5
     kubectl_version: 1.17.0
     helm_version: 3.0.2
