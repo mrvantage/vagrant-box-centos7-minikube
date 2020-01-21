@@ -1,4 +1,8 @@
 ## Changelog
+### 1.0.5-20200121
+* Updated minikube to 1.6.2
+* Updated VirtualBox Guest Additions to 6.0.16
+
 ### 1.0.4-20191219
 * Changed minikube configuration to allow NodePort services on port numbers 1024-65535
 * Installed some troubleshooting tools in the image: telnet, tcpdump
