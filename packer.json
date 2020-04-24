@@ -8,6 +8,7 @@
     "kubectl_version": "{{ env `KUBECTL_VERSION` }}",
     "helm_version": "{{ env `HELM_VERSION` }}",
     "vagrant_cloud_user": "{{ env `VAGRANT_CLOUD_USER` }}",
+    "vagrant_cloud_box": "{{ env `VAGRANT_CLOUD_BOX` }}",
     "vagrant_cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
     "box_version": "{{ env `BOX_VERSION` }}",
     "box_version_description": "{{ env `BOX_VERSION_DESCRIPTION` }}"
@@ -21,9 +22,7 @@
       "provider": "virtualbox",
       "box_name": "{{ user `box_base` }}",
       "add_force": true,
-      "template": "templates/Vagrantfile.tpl",
-      "output_dir": "build",
-      "output_vagrantfile": "Vagrantfile"
+      "template": "templates/Vagrantfile.tpl"
     }
   ],
   "provisioners": [
@@ -48,7 +47,7 @@
     [
       {
         "type": "vagrant-cloud",
-        "box_tag": "mrvantage/centos7-minikube",
+        "box_tag": "{{ user `vagrant_cloud_user` }}/{{ user `vagrant_cloud_box` }}",
         "access_token": "{{user `vagrant_cloud_token`}}",
         "version": "{{user `box_version`}}",
         "version_description": "{{user `box_version_description`}}",

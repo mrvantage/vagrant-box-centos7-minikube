@@ -2,12 +2,11 @@
   become: yes
   become_method: sudo
   vars:
-    minikube_version: 1.6.2
-    docker_version: 19.03.5
-    kubectl_version: 1.17.0
-    helm_version: 3.0.2
+    minikube_version: 1.9.2
+    docker_version: 19.03.8
+    kubectl_version: 1.18.2
+    helm_version: 3.2.0
   tasks:
-
     - name: install system updates
       yum: name=* state=latest update_cache=yes
 
@@ -21,7 +20,7 @@
     - name: disable swap permanently
       lineinfile:
         path: /etc/fstab
-        regexp: '^[^#].*swap.*$'
+        regexp: "^[^#].*swap.*$"
         state: absent
 
     - name: delete swapfile
@@ -31,13 +30,13 @@
 
     - name: install prerequisites
       yum:
-        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump ]
+        name: [vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump]
 
     - name: download minikube rpm
       get_url:
-        url: https://storage.googleapis.com/minikube/releases/latest/minikube-{{ minikube_version }}.rpm
+        url: https://github.com/kubernetes/minikube/releases/download/v{{ minikube_version }}/minikube-{{ minikube_version }}-0.x86_64.rpm
         dest: /var/tmp/minikube-{{ minikube_version }}.rpm
-        mode: '0644'
+        mode: "0644"
 
     - name: install minikube rpm
       yum:
@@ -80,6 +79,13 @@
     - name: apply sysctl config
       shell: sysctl -p
 
+    - name: set minikube config kubernetes version
+      shell: minikube config set kubernetes-version v1.18.2
+
+    - name: install conntrack
+      yum:
+        name: conntrack-tools
+
     - name: start minikube
       shell: minikube start --vm-driver=none
 
@@ -87,15 +93,15 @@
       lineinfile:
         state: present
         path: /etc/kubernetes/manifests/kube-apiserver.yaml
-        line: '    - --service-node-port-range=1024-65535'
-        insertafter: '^.*service-account-key-file.*$'
+        line: "    - --service-node-port-range=1024-65535"
+        insertafter: "^.*service-account-key-file.*$"
 
     - name: start and enable kubelet service
       service:
         name: kubelet
         enabled: yes
         state: started
-    
+
     - name: create dir /home/vagrant/bin
       file:
         path: /home/vagrant/bin
@@ -124,13 +130,19 @@
     - name: fix kubectl conf
       replace:
         path: /home/vagrant/.kube/config
-        regexp: '/root'
-        replace: '/home/vagrant'
+        regexp: "/root"
+        replace: "/home/vagrant"
 
     - name: enable kubectl autocompletion
       lineinfile:
         path: /home/vagrant/.bashrc
         line: source <(kubectl completion bash)
+        insertafter: EOF
+
+    - name: enable kubectl alias k
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: alias k="kubectl"
         insertafter: EOF
 
     - name: copy minikube conf
