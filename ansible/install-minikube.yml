@@ -1,11 +1,6 @@
 - hosts: all
   become: yes
   become_method: sudo
-  vars:
-    minikube_version: 1.6.2
-    docker_version: 19.03.5
-    kubectl_version: 1.17.0
-    helm_version: 3.0.2
   tasks:
 
     - name: install system updates
@@ -31,19 +26,19 @@
 
     - name: install prerequisites
       yum:
-        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump ]
+        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils ]
 
-    - name: download minikube rpm
+    - name: download minikube version {{ minikube_version }} rpm
       get_url:
-        url: https://storage.googleapis.com/minikube/releases/latest/minikube-{{ minikube_version }}.rpm
+        url: https://github.com/kubernetes/minikube/releases/download/v{{ minikube_version }}/minikube-{{ minikube_version }}-0.x86_64.rpm
         dest: /var/tmp/minikube-{{ minikube_version }}.rpm
         mode: '0644'
 
-    - name: install minikube rpm
+    - name: install minikube version {{ minikube_version }} rpm
       yum:
         name: /var/tmp/minikube-{{ minikube_version }}.rpm
 
-    - name: delete minikube rpm
+    - name: delete minikube version {{ minikube_version }} rpm
       file:
         path: /var/tmp/minikube-{{ minikube_version }}.rpm
         state: absent
@@ -56,7 +51,7 @@
         gpgcheck: yes
         gpgkey: https://download.docker.com/linux/centos/gpg
 
-    - name: install docker-ce
+    - name: install docker-ce version {{ docker_version }}
       yum:
         name: docker-ce-{{ docker_version }}
 
@@ -109,7 +104,7 @@
         gpgcheck: yes
         gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 
-    - name: install kubectl
+    - name: install kubectl version {{ kubectl_version }}
       yum:
         name: kubectl-{{ kubectl_version }}
 
@@ -133,6 +128,18 @@
         line: source <(kubectl completion bash)
         insertafter: EOF
 
+    - name: enable kubectl alias k
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: alias k="kubectl"
+        insertafter: EOF
+
+    - name: enable kubectl alias kc
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: alias kc="kubectl"
+        insertafter: EOF
+
     - name: copy minikube conf
       copy:
         src: /root/.minikube
@@ -146,13 +153,13 @@
         path: /vagrant
         state: directory
 
-    - name: download helm
+    - name: download helm version {{ helm_version }}
       get_url:
         url: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
         dest: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
         mode: 0755
 
-    - name: extract helm
+    - name: extract helm version {{ helm_version }}
       unarchive:
         src: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
         remote_src: yes
@@ -162,7 +169,7 @@
           - "--strip-components=1"
         mode: 0755
 
-    - name: delete downloaded helm installer
+    - name: delete downloaded helm version {{ helm_version }} installer
       file:
         path: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
         state: absent
