@@ -1,4 +1,20 @@
 ## Changelog
+### 1.0.6-20200724
+* Updated CentOS base box to version 2004.01
+* Updated Ansible to version 2.9.10
+* Updated Minikube to version 1.12.0
+* Updated Docker CE to version 19.03.11
+* Updated kubectl to version 1.18.5
+* Updated Helm to version 3.2.4
+* Updated VirtualBox Guest Additions to 6.1.12
+* Updated Packer configuration files to work with Packer 1.6.0
+* Added the possibility to pre-configure the Vagrant cloud username and token
+* Added conntrack-tools pre-installed in the base box image
+* Added checks to make sure all required tools are installed before building
+* Refactored hardcoded stuff in various places
+* Made sure variables for software versions are only used once in all build scripts
+* Updated documentation to make it easier for someone else to build a box
+
 ### 1.0.5-20200121
 * Updated minikube to 1.6.2
 * Updated VirtualBox Guest Additions to 6.0.16
