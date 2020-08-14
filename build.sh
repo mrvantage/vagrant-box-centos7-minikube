@@ -3,20 +3,20 @@
 set -e
 
 # Set version info
-BOX_VERSION_BASE=1.0.6
+BOX_VERSION_BASE=1.0.7
 
 # Set versions requested of main components (These will be used in Packer and passed to Ansible downstream)
 export BOX_BASE="centos/7"
 export BOX_BASE_VERSION=2004.01
-export ANSIBLE_VERSION=2.9.10
-export MINIKUBE_VERSION=1.12.1
-export DOCKER_VERSION=19.03.11
-export KUBECTL_VERSION=1.18.6
-export HELM_VERSION=3.2.4
+export ANSIBLE_VERSION=2.9.12
+export MINIKUBE_VERSION=1.12.3
+export DOCKER_VERSION=19.03.12
+export KUBECTL_VERSION=1.18.8
+export HELM_VERSION=3.3.0
 
 # Set versions of supported tools, if they don't match, a warning will be shown on screen
 export VIRTUALBOX_VERSION="6.1.12r139181"
-export PACKER_VERSION="v1.6.0"
+export PACKER_VERSION="v1.6.1"
 export VAGRANT_VERSION="2.2.9"
 
 # Set the Vagrant cloud user and box name (make sure you have admin permissions to, or are the owner of this repository)
@@ -41,7 +41,7 @@ INSTALLED_VIRTUALBOX_VERSION=$(vboxmanage --version)
 INSTALLED_PACKER_VERSION=$(packer version | awk '{print $2}')
 INSTALLED_VAGRANT_VERSION=$(vagrant version | grep Installed | awk -F: '{print $2}' | awk '{print $1}')
 
-if [[ $INSTALLED_VIRTUALBOX_VERSION != $VIRTUALBOX_VERSION || $INSTALLED_PACKER_VERSION != $PACKER_VERSION ||$INSTALLED_VAGRANT_VERSION != $VAGRANT_VERSION ]]
+if [[ $INSTALLED_VIRTUALBOX_VERSION != $VIRTUALBOX_VERSION || $INSTALLED_PACKER_VERSION != $PACKER_VERSION || $INSTALLED_VAGRANT_VERSION != $VAGRANT_VERSION ]]
 then
     echo "WARNING: One of the tool versions does not match the tested versions. Your mileage may vary..."
     echo " * Using VirtualBox version ${INSTALLED_VIRTUALBOX_VERSION} (tested with version ${VIRTUALBOX_VERSION})"
@@ -96,7 +96,7 @@ The box defaults to 2 CPU and 4GB of RAM, it is not advised to limit this.
 
 ## Versions included in this release
 Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${BOX_BASE_VERSION}
-* latest updates installed at build time
+* Latest OS updates installed at build time
 * ansible ${ANSIBLE_VERSION}
 * minikube ${MINIKUBE_VERSION}
 * docker ${DOCKER_VERSION}

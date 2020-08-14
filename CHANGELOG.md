@@ -1,4 +1,12 @@
 ## Changelog
+### 1.0.7-20200814
+* Updated Ansible to version 2.9.12
+* Updated Minikube to version 1.12.3
+* Updated Docker CE to version 19.03.12
+* Updated kubectl to version 1.18.8
+* Updated Helm to version 3.3.0
+* Updated Packer dependency to version 1.6.1
+
 ### 1.0.6-20200724
 * Updated CentOS base box to version 2004.01
 * Updated Ansible to version 2.9.10
