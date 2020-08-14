@@ -41,9 +41,24 @@ export VAGRANT_CLOUD_BOX_NAME="centos7-minikube"
 ```
 5. The packer Vagrant builder will create and package your new box in a file named `build/package.box`.
 6. Vagrant cloud post-processor will create a new version and upload the box to the Vagrant Cloud.
-7. If the box build succeeded, the script will automatically create a tag in your local git repository. If you are happy with the results, push to GitHub.
-8. Finally, log into your Vagrant Cloud and release the box to make it available for everybody.
+7. If the box build succeeded, the script will automatically create a tag in your local git repository. If you are happy with the results, push to GitHub, and create a GitHub release based on the tag.
+8. Finally, log into your Vagrant Cloud and release the box to make it available for everybody, and publish the GitHub release.
 9. Get yourself a celebratory beer!
+
+## Using the base box
+You can use the base box like any other base box. The box itself is provisioned with Ansible, so if you wish to use Ansible in your provisioning process, you do not need to install Ansible again, as this is already part of the base box.
+
+Configure your `Vagrantfile` as follows to re-use the pre-installed Ansible:
+
+```
+# Provision using Ansible, using the pre-installed Ansible in the base box
+config.vm.provision :ansible_local do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.install = false
+    ansible.compatibility_mode = "2.0"
+    ansible.become = true
+end
+```
 
 ## Changelog
 You can find the changelog [here](CHANGELOG.md)
