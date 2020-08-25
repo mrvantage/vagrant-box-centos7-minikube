@@ -61,4 +61,7 @@ end
 ```
 
 ## Changelog
-You can find the changelog [here](CHANGELOG.md)
+You can find the changelog [here](CHANGELOG.md).
+
+## License
+This code is licensed under the [Apache 2.0 license](LICENSE).
