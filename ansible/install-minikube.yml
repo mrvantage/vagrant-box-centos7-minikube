@@ -180,3 +180,20 @@
         mode: 0755
         owner: vagrant
         group: vagrant
+      
+    - name: Download kubetail
+      get_url:
+        url: https://codeload.github.com/johanhaleby/kubetail/tar.gz/{{ kubetail_version }}
+        dest: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+
+    - name: Extract kubetail
+      unarchive:
+        src: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: Install kubetail
+      file:
+        src: /opt/kubetail-{{ kubetail_version }}/kubetail
+        dest: /usr/bin/kubetail
+        state: link

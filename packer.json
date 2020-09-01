@@ -7,6 +7,7 @@
     "docker_version": "{{ env `DOCKER_VERSION` }}",
     "kubectl_version": "{{ env `KUBECTL_VERSION` }}",
     "helm_version": "{{ env `HELM_VERSION` }}",
+    "kubetail_version": "{{ env `KUBETAIL_VERSION` }}",
     "vagrant_cloud_user": "{{ env `VAGRANT_CLOUD_USER` }}",
     "vagrant_cloud_box_user": "{{ env `VAGRANT_CLOUD_BOX_USER` }}",
     "vagrant_cloud_box_name": "{{ env `VAGRANT_CLOUD_BOX_NAME` }}",
@@ -41,7 +42,7 @@
       "type": "ansible-local",
       "playbook_file": "ansible/install-minikube.yml",
       "extra_arguments": [
-        "--extra-vars \"minikube_version={{user `minikube_version`}} docker_version={{user `docker_version`}} kubectl_version={{user `kubectl_version`}} helm_version={{user `helm_version`}}\""
+        "--extra-vars \"minikube_version={{user `minikube_version`}} docker_version={{user `docker_version`}} kubectl_version={{user `kubectl_version`}} helm_version={{user `helm_version`}} kubetail_version={{user `kubetail_version`}}\""
       ]
     }
   ],
