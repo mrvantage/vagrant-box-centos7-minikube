@@ -3,16 +3,17 @@
 set -e
 
 # Set version info
-BOX_VERSION_BASE=1.0.7
+BOX_VERSION_BASE=1.1.0
 
 # Set versions requested of main components (These will be used in Packer and passed to Ansible downstream)
 export BOX_BASE="centos/7"
 export BOX_BASE_VERSION=2004.01
-export ANSIBLE_VERSION=2.9.12
+export ANSIBLE_VERSION=2.9.13
 export MINIKUBE_VERSION=1.12.3
 export DOCKER_VERSION=19.03.12
-export KUBECTL_VERSION=1.18.8
-export HELM_VERSION=3.3.0
+export KUBECTL_VERSION=1.19.0
+export HELM_VERSION=3.3.1
+export KUBETAIL_VERSION=1.6.12
 
 # Set versions of supported tools, if they don't match, a warning will be shown on screen
 export VIRTUALBOX_VERSION="6.1.12r139181"
@@ -38,8 +39,8 @@ fi
 
 # Check the tool versions
 INSTALLED_VIRTUALBOX_VERSION=$(vboxmanage --version)
-INSTALLED_PACKER_VERSION=$(packer version | awk '{print $2}')
-INSTALLED_VAGRANT_VERSION=$(vagrant version | grep Installed | awk -F: '{print $2}' | awk '{print $1}')
+INSTALLED_PACKER_VERSION=$(packer --version)
+INSTALLED_VAGRANT_VERSION=$(vagrant --version | awk '{print $2}')
 
 if [[ $INSTALLED_VIRTUALBOX_VERSION != $VIRTUALBOX_VERSION || $INSTALLED_PACKER_VERSION != $PACKER_VERSION || $INSTALLED_VAGRANT_VERSION != $VAGRANT_VERSION ]]
 then
@@ -102,6 +103,7 @@ Based on box [${BOX_BASE}](https://app.vagrantup.com/centos/boxes/7) version ${B
 * docker ${DOCKER_VERSION}
 * kubectl ${KUBECTL_VERSION}
 * helm ${HELM_VERSION}
+* kubetail ${KUBETAIL_VERSION}
 
 ---
 
