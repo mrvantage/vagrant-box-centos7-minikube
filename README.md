@@ -13,9 +13,9 @@ Built boxes can be found on [Vagrant Cloud](https://app.vagrantup.com/mrvantage/
 ## Prerequisites
 To be able to build the box yourself, you'll need at least following tools installed:
 
-* [Virtualbox](https://www.virtualbox.org/) (tested with version 6.1.12)
-* [Vagrant](https://www.vagrantup.com/) (tested with version 2.2.9)
-* [Packer](https://www.packer.io/) (tested with version 1.6.0)
+* [Virtualbox](https://www.virtualbox.org/) (tested with version 6.1.14)
+* [Vagrant](https://www.vagrantup.com/) (tested with version 2.2.10)
+* [Packer](https://www.packer.io/) (tested with version 1.6.2)
 
 The build wil be uploaded to Vagrant Cloud, so you'll need an account and corresponding token there. On top of that, the box has to be pre-created for the upload to succeed.
 
@@ -48,7 +48,7 @@ export VAGRANT_CLOUD_BOX_NAME="centos7-minikube"
 ## Using the base box
 You can use the base box like any other base box. The box itself is provisioned with Ansible, so if you wish to use Ansible in your provisioning process, you do not need to install Ansible again, as this is already part of the base box.
 
-Configure your `Vagrantfile` as follows to re-use the pre-installed Ansible:
+Configure your `Vagrantfile` as follows to re-use the pre-installed Ansible (if you don't want to use Ansible to do your provisioning, you can skip this):
 
 ```
 # Provision using Ansible, using the pre-installed Ansible in the base box
@@ -56,7 +56,7 @@ config.vm.provision :ansible_local do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.install = false
     ansible.compatibility_mode = "2.0"
-    ansible.become = true
+    ansible.become = true # This can be true or false, whether or not you need to do stuff as root
 end
 ```
 
