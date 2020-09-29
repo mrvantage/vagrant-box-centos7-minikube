@@ -1,4 +1,11 @@
 ## Changelog
+### 1.1.1-20200929
+* Updated Ansible to version 2.10.0
+* Updated kubectl to version 1.19.2
+* Updated Helm to version 3.3.4
+* Updated Packer dependency to version 1.6.2
+* Add kubetail to the image, version 1.6.14
+
 ### 1.1.0-20200901
 * Updated Ansible to version 2.9.13
 * Updated kubectl to version 1.19.0
