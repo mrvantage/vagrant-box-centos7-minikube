@@ -1,4 +1,12 @@
 ## Changelog
+### 1.1.2-20201105
+* Updated Ansible to version 2.10.3
+* Updated Minikube to version 1.14.2
+* Updated kubectl to version 1.19.3
+* Updated Helm to version 3.4.0
+* Updated Virtualbox dependency to version 6.1.16r140961
+* Updated Packer dependency to version 1.6.3
+
 ### 1.1.1-20200929
 * Updated Ansible to version 2.10.0
 * Updated kubectl to version 1.19.2
