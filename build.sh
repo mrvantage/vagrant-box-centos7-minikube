@@ -3,21 +3,21 @@
 set -e
 
 # Set version info
-BOX_VERSION_BASE=1.1.1
+BOX_VERSION_BASE=1.1.2
 
 # Set versions requested of main components (These will be used in Packer and passed to Ansible downstream)
 export BOX_BASE="centos/7"
 export BOX_BASE_VERSION=2004.01
-export ANSIBLE_VERSION=2.10.0
-export MINIKUBE_VERSION=1.13.1
+export ANSIBLE_VERSION=2.10.3
+export MINIKUBE_VERSION=1.14.2
 export DOCKER_VERSION=19.03.13
-export KUBECTL_VERSION=1.19.2
-export HELM_VERSION=3.3.4
+export KUBECTL_VERSION=1.19.3
+export HELM_VERSION=3.4.0
 export KUBETAIL_VERSION=1.6.12
 
 # Set versions of supported tools, if they don't match, a warning will be shown on screen
-export VIRTUALBOX_VERSION="6.1.14r140239"
-export PACKER_VERSION="1.6.2"
+export VIRTUALBOX_VERSION="6.1.16r140961"
+export PACKER_VERSION="1.6.3"
 export VAGRANT_VERSION="2.2.10"
 
 # Set the Vagrant cloud user and box name (make sure you have admin permissions to, or are the owner of this repository)
