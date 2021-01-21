@@ -1,4 +1,15 @@
 ## Changelog
+### 1.1.3-20210121
+* Added some yum packages to facilitate updating the VirtualBox Guest Additions in the later usage of the base box
+* Updated Ansible to version 2.10.5
+* Updated Minikube to version 1.16.0
+* Updated Docker to version 20.10.2
+* Updated kubectl to version 1.20.2
+* Updated Helm to version 3.5.0
+* Updated Virtualbox dependency to version 6.1.18r142142
+* Updated Packer dependency to version 1.6.6
+* Updated Vagrant dependency to version 2.2.14
+
 ### 1.1.2-20201105
 * Updated Ansible to version 2.10.3
 * Updated Minikube to version 1.14.2

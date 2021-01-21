@@ -26,7 +26,7 @@
 
     - name: install prerequisites
       yum:
-        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils ]
+        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils, kernel-devel, elfutils-libelf-devel, gcc, cpp, glibc-devel, glibc-headers, kernel-headers, libmpc, mpfr, zlib-devel ]
 
     - name: download minikube version {{ minikube_version }} rpm
       get_url:
