@@ -30,7 +30,7 @@
 
     # this could also be done by setting a fact using uname -r and loading the fact here, but using shell will do for now (remove the annoying warning though)
     - name: install kernel headers for the running kernel
-      shell: '/usr/bin/yum install "kernel-devel-$(uname -r)"'
+      shell: '/usr/bin/yum install -y "kernel-devel-$(uname -r)"'
       args:
         warn: false
 
