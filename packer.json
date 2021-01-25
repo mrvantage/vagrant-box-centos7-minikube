@@ -49,9 +49,13 @@
   "post-processors": [
     [
       {
-        "output": "vagrant-box-centos7-minikube.box",
-        "type": "vagrant",
-        "vagrantfile_template": "templates/Vagrantfile.tpl"
+        "type": "vagrant-cloud",
+        "box_tag": "{{ user `vagrant_cloud_box_user` }}/{{ user `vagrant_cloud_box_name` }}",
+        "access_token": "{{user `vagrant_cloud_token`}}",
+        "version": "{{user `box_version`}}",
+        "version_description": "{{user `box_version_description`}}",
+        "no_release": true,
+        "keep_input_artifact": true
       }
     ]
   ]
