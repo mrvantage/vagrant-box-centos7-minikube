@@ -3,17 +3,18 @@
 set -e
 
 # Set version info
-BOX_VERSION_BASE=1.1.3
+BOX_VERSION_BASE=1.1.4
 
 # Set versions requested of main components (These will be used in Packer and passed to Ansible downstream)
-export BOX_BASE="centos/7"
-export BOX_BASE_VERSION=2004.01
+export BOX_BASE="bento/centos-7"
+export BOX_BASE_VERSION=202012.21.0
 export ANSIBLE_VERSION=2.10.5
-export MINIKUBE_VERSION=1.16.0
+export MINIKUBE_VERSION=1.17.0
 export DOCKER_VERSION=20.10.2
 export KUBECTL_VERSION=1.20.2
 export HELM_VERSION=3.5.0
 export KUBETAIL_VERSION=1.6.12
+export GUESTADDITIONS_VERSION=6.1.18
 
 # Set versions of supported tools, if they don't match, a warning will be shown on screen
 export VIRTUALBOX_VERSION="6.1.18r142142"

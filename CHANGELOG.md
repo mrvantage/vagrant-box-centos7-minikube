@@ -1,4 +1,8 @@
 ## Changelog
+### 1.1.4-20210125
+* Updated Minikube to version 1.17.0
+* Fixed installation of pip now that Python 2 is no longer supported in pip 21.0
+
 ### 1.1.3-20210121
 * Added some yum packages to facilitate updating the VirtualBox Guest Additions in the later usage of the base box
 * Updated Ansible to version 2.10.5

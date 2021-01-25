@@ -8,6 +8,7 @@
     "kubectl_version": "{{ env `KUBECTL_VERSION` }}",
     "helm_version": "{{ env `HELM_VERSION` }}",
     "kubetail_version": "{{ env `KUBETAIL_VERSION` }}",
+    "guestadditions_version": "{{ env `GUESTADDITIONS_VERSION` }}",
     "vagrant_cloud_user": "{{ env `VAGRANT_CLOUD_USER` }}",
     "vagrant_cloud_box_user": "{{ env `VAGRANT_CLOUD_BOX_USER` }}",
     "vagrant_cloud_box_name": "{{ env `VAGRANT_CLOUD_BOX_NAME` }}",
@@ -34,7 +35,6 @@
       "inline": [
         "sudo yum install -y epel-release",
         "sudo yum install -y python-pip",
-        "sudo pip install --upgrade pip",
         "sudo pip install ansible=={{ user `ansible_version` }}"
       ]
     },
@@ -42,20 +42,16 @@
       "type": "ansible-local",
       "playbook_file": "ansible/install-minikube.yml",
       "extra_arguments": [
-        "--extra-vars \"minikube_version={{user `minikube_version`}} docker_version={{user `docker_version`}} kubectl_version={{user `kubectl_version`}} helm_version={{user `helm_version`}} kubetail_version={{user `kubetail_version`}}\""
+        "--extra-vars \"minikube_version={{user `minikube_version`}} docker_version={{user `docker_version`}} kubectl_version={{user `kubectl_version`}} helm_version={{user `helm_version`}} kubetail_version={{user `kubetail_version`}} guestadditions_version={{user `guestadditions_version`}}\""
       ]
     }
   ],
   "post-processors": [
     [
       {
-        "type": "vagrant-cloud",
-        "box_tag": "{{ user `vagrant_cloud_box_user` }}/{{ user `vagrant_cloud_box_name` }}",
-        "access_token": "{{user `vagrant_cloud_token`}}",
-        "version": "{{user `box_version`}}",
-        "version_description": "{{user `box_version_description`}}",
-        "no_release": true,
-        "keep_input_artifact": true
+        "output": "vagrant-box-centos7-minikube.box",
+        "type": "vagrant",
+        "vagrantfile_template": "templates/Vagrantfile.tpl"
       }
     ]
   ]

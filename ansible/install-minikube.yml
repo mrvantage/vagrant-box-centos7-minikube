@@ -28,6 +28,40 @@
       yum:
         name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils, kernel-devel, elfutils-libelf-devel, gcc, cpp, glibc-devel, glibc-headers, kernel-headers, libmpc, mpfr, zlib-devel ]
 
+    # this could also be done by setting a fact using uname -r and loading the fact here, but using shell will do for now (remove the annoying warning though)
+    - name: install kernel headers for the running kernel
+      shell: '/usr/bin/yum install "kernel-devel-$(uname -r)"'
+      args:
+        warn: false
+
+    - name: download guest additions ISO file
+      get_url:
+        url: https://download.virtualbox.org/virtualbox/{{ guestadditions_version }}/VBoxGuestAdditions_{{ guestadditions_version }}.iso
+        dest: /home/vagrant/VBoxGuestAdditions.iso
+        mode: '0775'
+
+    - name: mount guest additions ISO read-only
+      mount:
+        path: /mnt/
+        src: /home/vagrant/VBoxGuestAdditions.iso
+        fstype: iso9660
+        opts: ro
+        state: mounted
+
+    # this is allowed to fail, most of the time the guest additions will be installed correctly, but will only activate on next reboot, so this is okay
+    - name: install guest additions
+      shell: /mnt/VBoxLinuxAdditions.run || /bin/true
+
+    - name: unmount guest additions ISO
+      mount:
+        path: /mnt/
+        state: unmounted
+
+    - name: delete downloaded guest additions ISO file
+      file:
+        path: /home/vagrant/VBoxGuestAdditions.iso
+        state: absent
+
     - name: download minikube version {{ minikube_version }} rpm
       get_url:
         url: https://github.com/kubernetes/minikube/releases/download/v{{ minikube_version }}/minikube-{{ minikube_version }}-0.x86_64.rpm
