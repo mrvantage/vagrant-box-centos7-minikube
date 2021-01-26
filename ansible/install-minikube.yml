@@ -6,7 +6,7 @@
     - name: install system updates
       yum: name=* state=latest update_cache=yes
 
-    - name: Disable SELinux
+    - name: disable SELinux
       selinux:
         state: disabled
 
@@ -68,7 +68,7 @@
         enabled: yes
         state: started
 
-    - name: Add vagrant user to docker group
+    - name: add vagrant user to docker group
       user:
         name: vagrant
         groups: docker
@@ -85,7 +85,7 @@
     - name: start minikube
       shell: minikube start --vm-driver=none
 
-    - name: Add service-node-port-range parameter to minikube config file
+    - name: add service-node-port-range parameter to minikube config file
       lineinfile:
         state: present
         path: /etc/kubernetes/manifests/kube-apiserver.yaml
@@ -188,19 +188,24 @@
         owner: vagrant
         group: vagrant
       
-    - name: Download kubetail
+    - name: download kubetail version {{ kubetail_version }}
       get_url:
         url: https://codeload.github.com/johanhaleby/kubetail/tar.gz/{{ kubetail_version }}
         dest: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
 
-    - name: Extract kubetail
+    - name: extract kubetail
       unarchive:
         src: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
         dest: /opt
         remote_src: yes
 
-    - name: Install kubetail
+    - name: install kubetail version {{ kubetail_version }}
       file:
         src: /opt/kubetail-{{ kubetail_version }}/kubetail
         dest: /usr/bin/kubetail
         state: link
+
+    - name: delete kubetail version {{ kubetail_version }} installer
+      file:
+        path: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+        state: absent
