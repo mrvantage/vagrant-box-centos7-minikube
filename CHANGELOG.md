@@ -1,7 +1,7 @@
 ## Changelog
 ### 1.2.0-20210126
 * Refactored base box, no longer using upstream centos/7 box, but building from scratch from the CentOS minimal ISO
-* Made sure VirtualBox guest additions 6.18.0 are installed and running
+* Made sure VirtualBox guest additions 6.1.18 are installed and running
 
 ### 1.1.4-20210125
 * Updated Minikube to version 1.17.0
