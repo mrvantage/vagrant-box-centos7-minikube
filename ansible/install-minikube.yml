@@ -10,35 +10,9 @@
       selinux:
         state: disabled
 
-    - name: disable swap
-      shell: /usr/sbin/swapoff -a
-
-    - name: disable swap permanently
-      lineinfile:
-        path: /etc/fstab
-        regexp: '^[^#].*swap.*$'
-        state: absent
-
-    - name: delete swapfile
-      file:
-        path: /swapfile
-        state: absent
-
     - name: install prerequisites
       yum:
-        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils, kernel-devel, elfutils-libelf-devel, gcc, cpp, glibc-devel, glibc-headers, kernel-headers, libmpc, mpfr, zlib-devel ]
-
-    # this could also be done by setting a fact using uname -r and loading the fact here, but using shell will do for now (remove the annoying warning though)
-    - name: install kernel headers for the running kernel
-      shell: '/usr/bin/yum install -y "kernel-devel-$(uname -r)"'
-      args:
-        warn: false
-
-    - name: download guest additions ISO file
-      get_url:
-        url: https://download.virtualbox.org/virtualbox/{{ guestadditions_version }}/VBoxGuestAdditions_{{ guestadditions_version }}.iso
-        dest: /home/vagrant/VBoxGuestAdditions.iso
-        mode: '0775'
+        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils, kernel-devel, elfutils-libelf-devel, gcc, cpp, glibc-devel, glibc-headers, kernel-headers, libmpc, mpfr, zlib-devel, bzip2 ]
 
     - name: mount guest additions ISO read-only
       mount:
@@ -48,16 +22,15 @@
         opts: ro
         state: mounted
 
-    # this is allowed to fail, most of the time the guest additions will be installed correctly, but will only activate on next reboot, so this is okay
     - name: install guest additions
-      shell: /mnt/VBoxLinuxAdditions.run || /bin/true
+      shell: /mnt/VBoxLinuxAdditions.run
 
     - name: unmount guest additions ISO
       mount:
         path: /mnt/
-        state: unmounted
+        state: absent
 
-    - name: delete downloaded guest additions ISO file
+    - name: delete guest additions ISO file
       file:
         path: /home/vagrant/VBoxGuestAdditions.iso
         state: absent

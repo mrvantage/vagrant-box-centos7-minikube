@@ -1,4 +1,6 @@
 build/
 packer_cache/
 test-vagrant/
+output-virtualbox-iso/
 build.env
+*.iso
