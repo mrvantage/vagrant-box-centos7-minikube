@@ -3,30 +3,69 @@
   become_method: sudo
   tasks:
 
+    - name: create the .ssh directory for the vagrant user
+      file:
+        path: /home/vagrant/.ssh
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: '0700'
+
+    - name: download vagrant default insecure ssh key and add it to vagrants authorized_keys file
+      get_url:
+        url: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+        dest: /home/vagrant/.ssh/authorized_keys
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
+        force: true
+
     - name: install system updates
       yum: name=* state=latest update_cache=yes
 
-    - name: Disable SELinux
+    - name: disable SELinux
       selinux:
         state: disabled
 
-    - name: disable swap
-      shell: /usr/sbin/swapoff -a
-
-    - name: disable swap permanently
-      lineinfile:
-        path: /etc/fstab
-        regexp: '^[^#].*swap.*$'
-        state: absent
-
-    - name: delete swapfile
-      file:
-        path: /swapfile
-        state: absent
-
     - name: install prerequisites
       yum:
-        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils, kernel-devel, elfutils-libelf-devel, gcc, cpp, glibc-devel, glibc-headers, kernel-headers, libmpc, mpfr, zlib-devel ]
+        name: [ vim, socat, device-mapper-persistent-data, lvm2, telnet, tcpdump, conntrack-tools, bind-utils, kernel-devel, elfutils-libelf-devel, gcc, cpp, glibc-devel, glibc-headers, kernel-headers, libmpc, mpfr, zlib-devel, bzip2 ]
+
+    - name: mount guest additions ISO read-only
+      mount:
+        path: /mnt/
+        src: /home/vagrant/VBoxGuestAdditions.iso
+        fstype: iso9660
+        opts: ro
+        state: mounted
+
+    - name: install guest additions
+      shell: /mnt/VBoxLinuxAdditions.run
+
+    - name: unmount guest additions ISO
+      mount:
+        path: /mnt/
+        state: absent
+
+    - name: delete guest additions ISO file
+      file:
+        path: /home/vagrant/VBoxGuestAdditions.iso
+        state: absent
+
+    - name: make sure vboxadd service is started and enabled by default
+      systemd:
+        name: vboxadd
+        state: started
+        enabled: true
+
+    - name: make sure vboxadd-service service is started and enabled by default
+      systemd:
+        name: vboxadd-service
+        state: started
+        enabled: true
+
+    - name: set up virtual box guest additions for all installed kernels
+      shell: /sbin/rcvboxadd quicksetup all
 
     - name: download minikube version {{ minikube_version }} rpm
       get_url:
@@ -61,7 +100,7 @@
         enabled: yes
         state: started
 
-    - name: Add vagrant user to docker group
+    - name: add vagrant user to docker group
       user:
         name: vagrant
         groups: docker
@@ -78,7 +117,7 @@
     - name: start minikube
       shell: minikube start --vm-driver=none
 
-    - name: Add service-node-port-range parameter to minikube config file
+    - name: add service-node-port-range parameter to minikube config file
       lineinfile:
         state: present
         path: /etc/kubernetes/manifests/kube-apiserver.yaml
@@ -181,19 +220,24 @@
         owner: vagrant
         group: vagrant
       
-    - name: Download kubetail
+    - name: download kubetail version {{ kubetail_version }}
       get_url:
         url: https://codeload.github.com/johanhaleby/kubetail/tar.gz/{{ kubetail_version }}
         dest: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
 
-    - name: Extract kubetail
+    - name: extract kubetail
       unarchive:
         src: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
         dest: /opt
         remote_src: yes
 
-    - name: Install kubetail
+    - name: install kubetail version {{ kubetail_version }}
       file:
         src: /opt/kubetail-{{ kubetail_version }}/kubetail
         dest: /usr/bin/kubetail
         state: link
+
+    - name: delete kubetail version {{ kubetail_version }} installer
+      file:
+        path: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+        state: absent

@@ -1,5 +1,7 @@
 {
   "variables": {
+    "centos_base_iso": "{{ env `CENTOS_BASE_ISO` }}",
+    "centos_base_iso_sha256": "{{ env `CENTOS_BASE_ISO_SHA256` }}",
     "box_base": "{{ env `BOX_BASE` }}",
     "box_base_version": "{{ env `BOX_BASE_VERSION` }}",
     "ansible_version": "{{ env `ANSIBLE_VERSION` }}",
@@ -17,15 +19,45 @@
   },
   "builders": [
     {
-      "type": "vagrant",
-      "communicator": "ssh",
-      "source_path": "{{ user `box_base` }}",
-      "box_version": "{{ user `box_base_version` }}",
-      "provider": "virtualbox",
-      "box_name": "{{ user `box_base` }}",
-      "add_force": true,
-      "template": "templates/Vagrantfile.tpl",
-      "output_dir": "build"
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": 81920,
+      "guest_os_type": "RedHat_64",
+      "headless": true,
+      "http_directory": "http",
+      "iso_urls": [
+        "{{ user `centos_base_iso` }}",
+        "http://mirror.kinamo.be/centos/7.9.2009/isos/x86_64/{{ user `centos_base_iso` }}",
+        "http://centos.cu.be/7.9.2009/isos/x86_64/{{ user `centos_base_iso` }}",
+        "http://mirror.unix-solutions.be/centos/7.9.2009/isos/x86_64/{{ user `centos_base_iso` }}",
+        "http://centos.mirror.nucleus.be/7.9.2009/isos/x86_64/{{ user `centos_base_iso` }}"
+      ],
+      "iso_checksum": "sha256:{{ user `centos_base_iso_sha256` }}",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "1800s",
+      "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+      "guest_additions_path": "/home/vagrant/VBoxGuestAdditions.iso",
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "centos7-minikube",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "8192"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ]
+      ]
     }
   ],
   "provisioners": [
@@ -34,7 +66,6 @@
       "inline": [
         "sudo yum install -y epel-release",
         "sudo yum install -y python-pip",
-        "sudo pip install --upgrade pip",
         "sudo pip install ansible=={{ user `ansible_version` }}"
       ]
     },
@@ -48,6 +79,11 @@
   ],
   "post-processors": [
     [
+      {
+        "output": "build/{{user `vagrant_cloud_box_name` }}-{{user `box_version`}}.box",
+        "type": "vagrant",
+        "compression_level": 9
+      },
       {
         "type": "vagrant-cloud",
         "box_tag": "{{ user `vagrant_cloud_box_user` }}/{{ user `vagrant_cloud_box_name` }}",

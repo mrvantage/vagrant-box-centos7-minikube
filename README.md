@@ -1,21 +1,23 @@
 # vagrant-box-centos7-minikube
 ## Description
-This project contains everything needed to build the centos7-minikube vagrant box. The box is build using Vagrant's packer tool. Currently only a box for the Virtualbox provider is built.
+This project contains everything needed to build the centos7-minikube vagrant box. The box is build using Vagrant's packer tool. Currently only a box for the VirtualBox provider is built.
 
-The box resulting is based on the centos/7 box. I try to keep the builds up to date with the latest version of this box. Several tools are included in the box:
+The box resulting is based on a clean CentOS 7 minimal install. I try to keep the builds up to date with the latest version of this box. Several tools are included in the box:
 * ansible
 * minikube
 * docker
+* helm
 * kubectl
+* kubetail
 
 Built boxes can be found on [Vagrant Cloud](https://app.vagrantup.com/mrvantage/boxes/centos7-minikube)
 
 ## Prerequisites
 To be able to build the box yourself, you'll need at least following tools installed:
 
-* [Virtualbox](https://www.virtualbox.org/) (tested with version 6.1.14)
-* [Vagrant](https://www.vagrantup.com/) (tested with version 2.2.10)
-* [Packer](https://www.packer.io/) (tested with version 1.6.2)
+* [Virtualbox](https://www.virtualbox.org/) (tested with version 6.1.18)
+* [Vagrant](https://www.vagrantup.com/) (tested with version 2.2.14)
+* [Packer](https://www.packer.io/) (tested with version 1.6.6)
 
 The build wil be uploaded to Vagrant Cloud, so you'll need an account and corresponding token there. On top of that, the box has to be pre-created for the upload to succeed.
 
