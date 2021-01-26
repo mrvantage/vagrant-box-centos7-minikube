@@ -3,6 +3,23 @@
   become_method: sudo
   tasks:
 
+    - name: create the .ssh directory for the vagrant user
+      file:
+        path: /home/vagrant/.ssh
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: '0700'
+
+    - name: download vagrant default insecure ssh key and add it to vagrants authorized_keys file
+      get_url:
+        url: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+        dest: /home/vagrant/.ssh/authorized_keys
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
+        force: true
+
     - name: install system updates
       yum: name=* state=latest update_cache=yes
 
@@ -34,6 +51,21 @@
       file:
         path: /home/vagrant/VBoxGuestAdditions.iso
         state: absent
+
+    - name: make sure vboxadd service is started and enabled by default
+      systemd:
+        name: vboxadd
+        state: started
+        enabled: true
+
+    - name: make sure vboxadd-service service is started and enabled by default
+      systemd:
+        name: vboxadd-service
+        state: started
+        enabled: true
+
+    - name: set up virtual box guest additions for all installed kernels
+      shell: /sbin/rcvboxadd quicksetup all
 
     - name: download minikube version {{ minikube_version }} rpm
       get_url:
