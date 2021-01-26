@@ -1,4 +1,8 @@
 ## Changelog
+### 1.2.0-20210126
+* Refactored base box, no longer using upstream centos/7 box, but building from scratch from the CentOS minimal ISO
+* Made sure VirtualBox guest additions 6.18.0 are installed and running
+
 ### 1.1.4-20210125
 * Updated Minikube to version 1.17.0
 * Fixed installation of pip now that Python 2 is no longer supported in pip 21.0
