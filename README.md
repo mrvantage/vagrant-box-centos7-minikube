@@ -1,3 +1,6 @@
+# Deprication notice
+Development of this project has been moved to https://github.com/Q24/vagrant-box-centos7-minikube
+
 # vagrant-box-centos7-minikube
 ## Description
 This project contains everything needed to build the centos7-minikube vagrant box. The box is build using Vagrant's packer tool. Currently only a box for the VirtualBox provider is built.
